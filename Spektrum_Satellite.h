@@ -33,6 +33,7 @@ protected:
 private:
   unsigned long last_update;
   uint8_t frame_index;
+  uint8_t frame_seen;
   uint8_t frame[16];
 };
 

@@ -15,6 +15,7 @@ void Spektrum_Satellite::reset()
         channelData[i] = 0;
     }
     frame_index = 0;
+    frame_seen = 0;
     last_update = millis();
 }
 
@@ -37,7 +38,7 @@ boolean Spektrum_Satellite::update(uint8_t b)
         frame_index = 0;
     }
     last_update = current;
-    return !frame_index;
+    return !frame_index && frame_seen == 3;
 }
 
 
@@ -56,6 +57,15 @@ uint16_t Spektrum_Satellite::getChannel(uint8_t ch) const
 void Spektrum_Satellite::parseFrame(void)
 {
     header = frame[0] << 8 | frame[1];
+
+    if (!(frame[2] >> 7))
+    {
+        frame_seen = 1;
+    }
+    else
+    {
+        frame_seen |= 2;
+    }
 
     for (uint8_t i = 2; i < sizeof(frame); i += 2)
     {
