@@ -24,9 +24,10 @@ void setup()
 
 ISR(WDT_vect)
 {
-  // communications failure: set failure flag & turn on LED
+  // communications failure: set failure flag, turn on LED, & send message
   rx_failure = true;
   digitalWrite(LED, HIGH);
+  Serial.println("Receiver failure.");
   // re-enable interrupt
   wdt_enable_interrupt();
 }
