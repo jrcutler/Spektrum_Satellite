@@ -18,7 +18,8 @@ void setup()
   Serial.begin(115200);
   Serial1.begin(115200);
   // trigger watchdog IRQ after 500ms without a frame
-  wdt_enable_irq(WDTO_500MS);
+  wdt_enable(WDTO_500MS);
+  wdt_enable_interrupt();
 }
 
 ISR(WDT_vect)
@@ -26,8 +27,8 @@ ISR(WDT_vect)
   // communications failure: set failure flag & turn on LED
   rx_failure = true;
   digitalWrite(LED, HIGH);
-  // reset watchdog to prevent IRQ loop
-  wdt_reset();
+  // re-enable interrupt
+  wdt_enable_interrupt();
 }
 
 void dumpChannels()
